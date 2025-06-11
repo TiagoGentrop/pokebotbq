@@ -1,0 +1,110 @@
+from vertexai.preview import reasoning_engines
+from vertexai.preview.reasoning_engines import AdkApp # Para "empacotar" o agente em um aplicativo (geralmente para servir via API)
+from vertexai import agent_engines
+
+
+try:
+    req_path = os.path.join(os.path.dirname(__file__), 'requirements.txt')
+    with open(req_path) as f:
+            requirements = f.read().splitlines()
+except FileNotFoundError:
+    print("ERRO: requirements.txt não encontrado.")
+    sys.exit(1)
+
+deploy_env_vars = {
+    "APP_PROJECT_ID": os.getenv("GOOGLE_CLOUD_PROJECT"),
+    "BIGQUERY_DATASET": os.getenv("BIGQUERY_DATASET"),
+    "ADMIN_PASSWORD": os.getenv("ADMIN_PASSWORD"),
+}
+
+
+# Criação da instância do aplicativo ADK
+
+app = AdkApp(agent=root_agent)  # "Empacota" o root_agent em um AdkApp.
+
+vertexai.init(
+    project=PROJECT_ID,
+    location= LOCATION,
+    staging_bucket= STANGING_BUCKET,
+)
+"""
+# Criar um agente
+
+remote_app = agent_engines.create(
+    agent_engine= root_agent,
+    requirements = requirements,
+    env_vars=deploy_env_vars,
+    extra_packages=["."]
+)
+
+remote_app = agent_engines.create(
+    agent_engine= root_agent,
+    requirements=[
+            "google-cloud-aiplatform[adk,agent_engines]"
+        ]
+)
+"""
+#Excluir um agente 
+"""
+remote_app = agent_engines.get('projects/539099506381/locations/us-central1/reasoningEngines/431122907297480704')
+remote_app.delete(force=True)
+"""
+#Id e nome do meu agente
+
+"""
+# Resorce name_2:" projects/539099506381/locations/us-central1/reasoningEngines/2394973819807727616"
+# Resource id_2:"5543628225839628288"
+
+"""
+
+#Testando o agent no agent engine
+
+"""
+remote_app = agent_engines.get('projects/539099506381/locations/us-central1/reasoningEngines/7047192234881449984')
+USER_ID_REMOTE = "tiago.tavares@gentrop.com"
+
+
+remote_session = remote_app.create_session(user_id=USER_ID_REMOTE)
+print(f"remote_session: {remote_session}")
+for event in remote_app.stream_query(
+    user_id=USER_ID_REMOTE,
+    session_id=remote_session["id"],
+    message="Qual é tipo do pikachu?"
+):
+    print(event)
+
+"""    
+"""
+#Atualizar um agente
+
+resource_name = "projects/539099506381/locations/us-central1/reasoningEngines/7047192234881449984"
+
+agent_engines.update(
+    resource_name=resource_name,   
+    agent_engine=root_agent,     
+    requirements=requirements,
+    env_vars=deploy_env_vars
+)
+
+"""
+
+
+
+
+# Sessão local
+
+"""
+app = reasoning_engines.AdkApp(
+    agent= root_agent,
+    enable_tracing= True,
+)
+
+session = app.create_session(user_id="u_123")
+
+for event in app.stream_query(
+    user_id="u_123",
+    session_id=session.id,
+    message="Qual o tipo do Pikachu?"
+):
+    print(event)
+"""

@@ -1,0 +1,10 @@
+# Ambiente Virtual
+venv/
+pokebot_env/
+__pycache__/
+
+# Segredos e Configurações Locais
+.env
+
+# Arquivos do VS Code
+.vscode/
